@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using SchoolTask;
 using SchoolTask.Entities;
+using SchoolTask.Interfaces;
+using SchoolTask.Middleware;
 using SchoolTask.Services;
 using System.Reflection;
 
@@ -23,6 +25,7 @@ builder.Services.AddScoped<SchoolSeeder>();
 builder.Services.AddScoped<ISchoolService, SchoolService>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IStudetnService, StudentService>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();
 
@@ -32,6 +35,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseCors(policy =>
     policy.WithOrigins("http://localhost:7014", "https://localhost:7112")

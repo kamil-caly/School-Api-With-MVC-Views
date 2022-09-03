@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SchoolTask.Entities;
+using SchoolTask.Exceptions;
 using SchoolTask.Interfaces;
 using SchoolTaskModels.Dtos;
 
