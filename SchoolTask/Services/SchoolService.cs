@@ -52,7 +52,7 @@ namespace SchoolTask.Services
             return school.Id;
         }
 
-        public bool UpdateSchool(UpdateSchoolDto dto, int id)
+        public void UpdateSchool(UpdateSchoolDto dto, int id)
         {
             var school = this.GetSchool(id);
 
@@ -61,7 +61,6 @@ namespace SchoolTask.Services
             school.FullName = dto.FullName;
 
             dbContext.SaveChanges();
-            return true;
         }
 
         public void DeleteSchool(int id)
@@ -72,7 +71,7 @@ namespace SchoolTask.Services
             dbContext.SaveChanges();
         }
 
-        private School GetSchool(int id)
+        public School GetSchool(int id)
         {
             var school = dbContext
                 .Schools

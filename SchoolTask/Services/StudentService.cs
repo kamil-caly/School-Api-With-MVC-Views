@@ -1,33 +1,29 @@
 ﻿using AutoMapper;
 using SchoolTask.Entities;
+using SchoolTask.Exceptions;
+using SchoolTask.Interfaces;
 using SchoolTaskModels.Dtos;
 
 namespace SchoolTask.Services
 {
-    public interface IStudetnService
-    {
-        List<StudentDto> GetAll(int schoolId, string name);
-        int Create(int schoolId, CreateStudentDto dto);
-    }
+    
     public class StudentService : IStudetnService
     {
         private readonly SchoolDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly ISchoolService schoolService;
 
-        public StudentService(SchoolDbContext dbContext, IMapper mapper)
+        public StudentService(SchoolDbContext dbContext, IMapper mapper,
+            ISchoolService schoolService)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.schoolService = schoolService;
         }
 
         public List<StudentDto> GetAll(int schoolId, string name)
         {
-            var school = this.GetSchoolById(schoolId);
-
-            if(school is null)
-            {
-                return null;
-            }
+            var school = schoolService.GetSchool(schoolId);
 
             var students = dbContext
                 .Students
@@ -42,7 +38,7 @@ namespace SchoolTask.Services
 
         public int Create(int schoolId, CreateStudentDto dto)
         {
-            var school = this.GetSchoolById(schoolId);
+            var school = schoolService.GetSchool(schoolId);
 
             var studentEntity = mapper.Map<Student>(dto);
 
@@ -54,18 +50,46 @@ namespace SchoolTask.Services
             return studentEntity.Id;
         }
 
-        private School GetSchoolById(int schoolId)
+        public StudentDto GetById(int schoolId, int studentId)
         {
-            var school = dbContext
-                .Schools
-                .FirstOrDefault(s => s.Id == schoolId);
+            var student = this.GetStudent(studentId, schoolId);
 
-            if (school is null)
+            var studetDto = mapper.Map<StudentDto>(student);
+            return studetDto;
+        }
+
+        public void Update(int schoolId, int studentId, UpdateStudentDto dto)
+        {
+            var student = this.GetStudent(studentId, schoolId);
+
+            student.Name = dto.Name;
+            student.Surname = dto.Surname;
+            student.StudentIndex = dto.StudentIndex;
+
+            dbContext.SaveChanges();
+        }
+
+        public void Delete(int schoolId, int studentId)
+        {
+            var student = this.GetStudent(studentId, schoolId);
+
+            dbContext.Students.Remove(student);
+            dbContext.SaveChanges();
+        }
+        private Student GetStudent(int studnetId, int schoolId)
+        {
+            var school = schoolService.GetSchool(schoolId);
+
+            var student = dbContext
+                .Students
+                .FirstOrDefault(s => s.Id == studnetId && s.SchoolId == schoolId);
+
+            if (student is null)
             {
-                throw new Exception("School not found");
+                throw new NotFoundException("Student not found");
             }
 
-            return school;
+            return student;
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SchoolTask.Entities;
+using SchoolTask.Interfaces;
 using SchoolTask.Services;
 using SchoolTaskModels.Dtos;
 
@@ -21,11 +22,6 @@ namespace SchoolTask.Controllers
         {
             var schools = service.GetAll();
 
-            if (schools is null)
-            {
-                return NotFound();
-            }
-
             return Ok(schools);
         }
 
@@ -33,11 +29,6 @@ namespace SchoolTask.Controllers
         public ActionResult<SchoolDto> Get([FromRoute] int id)
         {
             var school = service.GetById(id);
-            
-            if(school is null)
-            {
-                return NotFound();
-            }
 
             return Ok(school);
         }
@@ -54,9 +45,9 @@ namespace SchoolTask.Controllers
         [HttpPut("{id}")]
         public ActionResult Update([FromRoute] int id, [FromBody] UpdateSchoolDto dto)
         {
-            var isUpdated = service.UpdateSchool(dto, id);
+            service.UpdateSchool(dto, id);
 
-            return isUpdated ? Ok() : NotFound();
+            return Ok("School updated");
         }
 
         [HttpDelete("{id}")]
@@ -64,7 +55,7 @@ namespace SchoolTask.Controllers
         {
             service.DeleteSchool(id);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
