@@ -1,0 +1,45 @@
+﻿@page "/"
+@using SchoolTaskModels.Dtos;
+@inherits SchoolsBase
+
+@if(Schools is null)
+{
+    <h3>Loading Schools...</h3>
+}
+else
+{
+    <h3 class="mb-5">Schools</h3>
+
+        <div class="row">
+
+            @foreach (var item in Schools)
+            {
+                
+                <div>
+                     <div>
+                          <div>
+                              <h5><a href="#">Id: @item.Id </a></h5>
+                              <h5>FullName: @item.FullName </h5>
+                              <h5>City: @item.City </h5>
+                              <h5>Street: @item.Street </h5>
+                              <h5>Number: @item.Number </h5>
+                              <h5>SchoolType: @item.SchoolType </h5>
+                              
+                              @foreach (var student in item.Students)
+                              {
+                                  <h6><a href="#">Student Id: @student.Id</a></h6>
+                                  <h6>Name: @student.Name</h6>
+                                  <h6>Surname: @student.Surname</h6>
+                                  <h6>Index: @student.StudentIndex</h6>
+                                  <br />
+                              }
+                              <h5>------------------------------------</h5>
+                          </div>
+                     </div>
+                </div>
+
+            }
+
+        </div>
+    }
+}
