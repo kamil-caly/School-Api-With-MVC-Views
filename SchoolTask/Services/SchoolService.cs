@@ -75,6 +75,7 @@ namespace SchoolTask.Services
         {
             var school = dbContext
                 .Schools
+                .Include(s => s.Students)
                 .FirstOrDefault(s => s.Id == id);
 
             if (school is null)

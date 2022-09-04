@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
-using SchoolTask;
 using SchoolTask.Entities;
 using SchoolTask.Interfaces;
 using SchoolTask.Middleware;
+using SchoolTask.Seed;
 using SchoolTask.Services;
 using System.Reflection;
 

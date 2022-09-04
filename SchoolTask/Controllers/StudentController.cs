@@ -53,7 +53,7 @@ namespace SchoolTask.Controllers
         {
             studentService.Delete(schoolId, studentId);
 
-            return NoContent()
+            return NoContent();
         }
     }
 }
