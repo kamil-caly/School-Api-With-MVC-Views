@@ -39,12 +39,89 @@ namespace SchoolTask.Views.Controllers
             
             if (postResult.StatusCode == HttpStatusCode.Created)
             {
-                TempData["info"] = "Category created successfully";
+                TempData["info"] = "School created successfully";
             }
             else
             {
                 TempData["info"] = $"{postResult.StatusCode}";
+            }
 
+            return RedirectToAction("Index");
+        }
+
+        // GET
+        public async Task<IActionResult> Delete(int id)
+        {
+            using var result = await httpClient.GetAsync(baseUrl + $"/{id}");
+            var jsonSchoolDto = await result.Content.ReadAsStringAsync();
+
+            if (jsonSchoolDto is null)
+            {
+                TempData["info"] = $"{result.StatusCode}";
+                RedirectToAction("Index");
+            }
+
+            SchoolDto schoolDto = JsonConvert.DeserializeObject<SchoolDto>(jsonSchoolDto);
+
+            return View(schoolDto);
+        }
+
+        // POST
+        [HttpPost]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            using var deleteResult = await httpClient.DeleteAsync(baseUrl + $"/{id}");
+            var statusCode = deleteResult.StatusCode;
+
+            if (statusCode == HttpStatusCode.NoContent)
+            {
+                TempData["info"] = "School deleted successfully";
+            }
+            else
+            {
+                TempData["info"] = $"{statusCode}";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        // GET
+        public async Task<IActionResult> Edit(int id)
+        {
+            using var result = await httpClient.GetAsync(baseUrl + $"/{id}");
+            var jsonSchoolDto = await result.Content.ReadAsStringAsync();
+
+            if (jsonSchoolDto is null)
+            {
+                TempData["info"] = $"{result.StatusCode}";
+                RedirectToAction("Index");
+            }
+
+            SchoolDto schoolDto = JsonConvert.DeserializeObject<SchoolDto>(jsonSchoolDto);
+
+            return View(schoolDto);
+        }
+
+        // POST
+        [HttpPost]
+        public async Task<IActionResult> Edit(SchoolDto dto)
+        {
+            UpdateSchoolDto updateDto = new()
+            {
+                FullName = dto.FullName,
+                City = dto.City,
+                Street = dto.Street
+            };
+
+            using var updateResult = await httpClient.PutAsJsonAsync<UpdateSchoolDto>(baseUrl + $"/{dto.Id}", updateDto);
+
+            if (updateResult.StatusCode == HttpStatusCode.OK)
+            {
+                TempData["info"] = "School updated successfully";
+            }
+            else
+            {
+                TempData["info"] = $"{updateResult.StatusCode}";
             }
 
             return RedirectToAction("Index");
