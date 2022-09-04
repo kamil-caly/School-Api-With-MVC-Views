@@ -1,0 +1,70 @@
+﻿@using SchoolTaskModels.Dtos
+@model IEnumerable<SchoolDto>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index School</h1>
+
+
+
+<table class="table table-bordered table-striped" style="width:100%">
+
+    <thead>
+
+        <tr>
+            <th>
+                FullName
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Street
+            </th>
+            <th>
+                Number
+            </th>
+            <th>
+                SchoolType
+            </th>
+            
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var school in Model)
+        {
+            <tr>
+                <td>
+                    @school.FullName
+                </td>
+                <td>
+                    @school.City
+                </td>
+                <td>
+                    @school.Street
+                </td>
+                <td>
+                    @school.Number
+                </td>
+                <td>
+                    @school.SchoolType
+                </td>
+
+                @foreach (var student in school.Students)
+                {
+                    <td>
+                        <div>@student.Name | @student.Surname | @student.StudentIndex</div>
+                    </td>
+                }
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
