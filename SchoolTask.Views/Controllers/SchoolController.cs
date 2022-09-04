@@ -11,6 +11,8 @@ namespace SchoolTask.Views.Controllers
         {
              httpClient = new HttpClient();
         }
+
+        // GET
         public async Task<IActionResult> Index()
         {
             using var result = await httpClient.GetAsync("https://localhost:44304/api/school");
@@ -19,6 +21,12 @@ namespace SchoolTask.Views.Controllers
             IEnumerable<SchoolDto> schoolDtos = JsonConvert.DeserializeObject<List<SchoolDto>>(jsonSchoolsDtos);
 
             return View(schoolDtos);
+        }
+
+        // GET
+        public IActionResult Create()
+        {
+            return View();
         }
     }
 }
