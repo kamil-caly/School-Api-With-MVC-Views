@@ -1,0 +1,40 @@
+﻿@using SchoolTaskModels.Dtos
+@model CreateStudentDto
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Create Student</h2>
+            <hr />
+        </div>
+
+        <div asp-validation-summary="All"></div>
+
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Surname"></label>
+            <input asp-for="Surname" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="StudentIndex"></label>
+            <input asp-for="StudentIndex" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:150px">Create</button>
+        <a asp-controller="Student" asp-action="Index" class="btn btn-secondary" style="width:150px">
+            Back to List
+        </a>
+    </div>
+</form>
+
+@section Scripts{
+@{
+    <partial name="_ValidationScriptsPartial" />
+}
+}
+
