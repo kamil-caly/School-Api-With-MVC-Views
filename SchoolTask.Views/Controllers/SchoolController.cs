@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SchoolTaskModels.Dtos;
+using System.Net;
 
 namespace SchoolTask.Views.Controllers
 {
@@ -9,7 +10,7 @@ namespace SchoolTask.Views.Controllers
         private HttpClient httpClient;
         public SchoolController()
         {
-             httpClient = new HttpClient();
+            httpClient = new HttpClient();
         }
 
         // GET
@@ -27,6 +28,27 @@ namespace SchoolTask.Views.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        // POST
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateSchoolDto dto)
+        {
+            // var postJsonContent = new StringContent(JsonConvert.SerializeObject(dto));
+
+            using var postResult = await httpClient.PostAsJsonAsync<CreateSchoolDto>("https://localhost:44304/api/school", dto);
+            
+            if (postResult.StatusCode == HttpStatusCode.Created)
+            {
+                TempData["info"] = "Category created successfully";
+            }
+            else
+            {
+                TempData["info"] = $"{postResult.StatusCode}";
+
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
